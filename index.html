@@ -134,18 +134,21 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
   cursor:pointer;box-shadow:0 4px 20px rgba(48,96,224,.4);z-index:200;
   align-items:center;justify-content:center;}
 .mob-overlay{display:none;position:fixed;inset:0;z-index:100;pointer-events:none;}
-.mob-overlay.open{pointer-events:all;}
-.mob-bg{position:absolute;inset:0;background:rgba(10,15,40,.35);opacity:0;transition:opacity .28s;}
-.mob-overlay.open .mob-bg{opacity:1;}
-.mob-drawer{position:absolute;top:0;left:0;bottom:0;width:min(90vw,440px);
-  background:var(--white);border-right:1.5px solid var(--border);overflow-y:auto;
-  transform:translateX(-100%);transition:transform .32s cubic-bezier(.32,.72,0,1);}
+.mob-overlay.open{pointer-events:none;} /* overlay itself never blocks — children handle it */
+.mob-bg{position:absolute;inset:0;background:rgba(10,15,40,.35);opacity:0;
+  transition:opacity .28s;pointer-events:none;}
+.mob-overlay.open .mob-bg{opacity:1;pointer-events:all;}
+.mob-drawer{position:absolute;top:0;left:0;bottom:0;width:min(92vw,440px);
+  background:var(--white);border-right:1.5px solid var(--border);
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  transform:translateX(-100%);transition:transform .32s cubic-bezier(.32,.72,0,1);
+  z-index:2;pointer-events:all;}
 .mob-overlay.open .mob-drawer{transform:translateX(0);}
 .mob-dh{display:flex;align-items:center;justify-content:space-between;
   padding:16px 20px;border-bottom:1.5px solid var(--border);}
 .mob-dt{font-size:18px;font-weight:700;}
-.mob-x{width:36px;height:36px;border-radius:8px;background:var(--surface2);
-  border:1.5px solid var(--border);font-size:18px;color:var(--dim);
+.mob-x{width:44px;height:44px;border-radius:8px;background:var(--surface2);
+  border:1.5px solid var(--border);font-size:20px;color:var(--dim);
   cursor:pointer;display:flex;align-items:center;justify-content:center;}
 @media(max-width:760px){
   .panel{display:none;}.fab{display:flex;}.mob-overlay{display:block;}
@@ -306,7 +309,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
 <div id="floatInfo"><div id="fiContent"></div></div>
 </div>
 
-<button class="fab" onclick="openDrawer()">☰</button>
+<button class="fab" id="fabBtn" onclick="toggleDrawer()">☰</button>
 <div class="mob-overlay" id="MOV">
   <div class="mob-bg" onclick="closeDrawer()"></div>
   <div class="mob-drawer">
@@ -764,8 +767,12 @@ function spResultHTML(){
 // ══════════════════════════════════
 //  UPDATE PANEL
 // ══════════════════════════════════
-function sH(id,h){const e=document.getElementById(id);if(e)e.innerHTML=h;}
-function sS(id,v){const e=document.getElementById(id);if(e)e.value=v;}
+function sH(id,h){
+  const e=document.getElementById(id); if(e) e.innerHTML=h;
+}
+function sS(id,v){
+  const e=document.getElementById(id); if(e) e.value=v;
+}
 function safeSet(id,v){
   const e=document.getElementById(id);
   if(e&&document.activeElement!==e) e.value=f2(v);
@@ -803,29 +810,32 @@ function updatePanel(){
   if(isSP){visible.sin=true;visible.cos=true;}
 
   // Section visibility
-  FNS.forEach(fn=>{
-    const sec=document.getElementById(fn+'Sec');
-    if(sec) sec.style.display=(visible[fn]&&!isSP)?'':'none';
+  FNS.forEach(fn => {
+    const e = document.getElementById(fn+'Sec');
+    if(e) e.style.display = (visible[fn] && !isSP) ? 'block' : 'none';
   });
-  const spSec=document.getElementById('superposSec');
-  if(spSec) spSec.style.display=isSP?'':'none';
+  const spSec = document.getElementById('superposSec');
+  if(spSec) spSec.style.display = isSP ? 'block' : 'none';
 
   // Mode chips
-  document.getElementById('modeNormal')  .classList.toggle('on',graphMode==='normal');
-  document.getElementById('modeAbs')     .classList.toggle('on',graphMode==='abs');
-  document.getElementById('modeSuperpos').classList.toggle('on',graphMode==='superpos');
+  document.getElementById('modeNormal')  ?.classList.toggle('on', graphMode==='normal');
+  document.getElementById('modeAbs')     ?.classList.toggle('on', graphMode==='abs');
+  document.getElementById('modeSuperpos')?.classList.toggle('on', graphMode==='superpos');
 
   // Mode desc
-  const md=document.getElementById('modeDesc');
-  if(graphMode==='abs'){
-    md.style.display='';
-    md.innerHTML=`絕對值模式：<i>y</i> = |<span style="font-style:normal">f</span>(<i>x</i>)|，<i>x</i> 軸以下翻折，<b><i>y</i> 恆 ≥ 0</b>。`;
-  } else if(isSP){
-    md.style.display='';
-    md.innerHTML=`正餘弦疊合：<i>y</i> = <i>p</i>·sin <i>x</i> + <i>q</i>·cos <i>x</i>，化為單一 sin 或 cos。<br>此模式下固定顯示 sin 與 cos 分量。`;  } else {
-    md.style.display='none';
+  const md = document.getElementById('modeDesc');
+  if(md){
+    if(graphMode==='abs'){
+      md.style.display='';
+      md.innerHTML=`絕對值模式：<i>y</i> = |<span style="font-style:normal">f</span>(<i>x</i>)|，<i>x</i> 軸以下翻折，<b><i>y</i> 恆 ≥ 0</b>。`;
+    } else if(isSP){
+      md.style.display='';
+      md.innerHTML=`正餘弦疊合：<i>y</i> = <i>p</i>·sin <i>x</i> + <i>q</i>·cos <i>x</i>，化為單一 sin 或 cos。<br>此模式下固定顯示 sin 與 cos 分量。`;
+    } else {
+      md.style.display='none';
+    }
   }
-  if(isSP) sH('spResult',spResultHTML());
+  if(isSP){ sH('spResult', spResultHTML()); }
 
   // ── Float info box (bottom right) — show equations ──
   let html='';
@@ -838,15 +848,15 @@ function updatePanel(){
     html=`
     <div class="fi-row">
       <span class="fi-dot" style="background:${FN_COLOR.sin}"></span>
-      <span class="fi-text"><i>y</i><span style="font-style:normal;margin:0 0.18em">=</span><span style="font-style:normal">${f2(SP.p)}</span>·sin <i>x</i></span>
+      <span class="fi-text"><i>y</i><span style="font-style:normal;margin:0 0.18em">=</span><span style="font-style:normal">${f2(SP.p)}·sin </span><i>x</i></span>
     </div>
     <div class="fi-row">
       <span class="fi-dot" style="background:${FN_COLOR.cos}"></span>
-      <span class="fi-text"><i>y</i><span style="font-style:normal;margin:0 0.18em">=</span><span style="font-style:normal">${f2(SP.q)}</span>·cos <i>x</i></span>
+      <span class="fi-text"><i>y</i><span style="font-style:normal;margin:0 0.18em">=</span><span style="font-style:normal">${f2(SP.q)}·cos </span><i>x</i></span>
     </div>
     <div class="fi-row">
       <span class="fi-dot" style="background:${SUM_C}"></span>
-      <span class="fi-text"><b style="color:${SUM_C}"><i>y</i><span style="font-style:normal;margin:0 0.18em">=</span><span style="font-style:normal">${f3(R)}</span>·sin(<i>x</i><span style="font-style:normal;margin:0 0.15em">+</span><span style="font-style:normal">${tStr}</span>)</b></span>
+      <span class="fi-text"><b style="color:${SUM_C}"><i>y</i><span style="font-style:normal;margin:0 0.18em">=</span><span style="font-style:normal">${f3(R)}·sin(</span><i>x</i><span style="font-style:normal;margin:0 0.12em">+</span><span style="font-style:normal">${tStr})</span></b></span>
     </div>`;
   } else {
     FNS.forEach(fn=>{
@@ -920,43 +930,46 @@ canvas.addEventListener('touchend',e=>{e.preventDefault();panRef=null;pinchDist=
 // ══════════════════════════════════
 //  MOBILE DRAWER
 // ══════════════════════════════════
-function openDrawer(){document.getElementById('MOV').classList.add('open');}
-function closeDrawer(){document.getElementById('MOV').classList.remove('open');}
+function openDrawer(){
+  document.getElementById('MOV').classList.add('open');
+}
+function closeDrawer(){
+  document.getElementById('MOV').classList.remove('open');
+}
+function toggleDrawer(){
+  const open=document.getElementById('MOV').classList.contains('open');
+  open?closeDrawer():openDrawer();
+}
 
-(function buildMobile(){
-  const dest=document.getElementById('mobContent');
-  Array.from(document.querySelector('.panel').children).forEach(sec=>{
-    const clone=sec.cloneNode(true);
-    clone.querySelectorAll('.fn-chip').forEach(el=>{const fn=el.dataset.fn;el.onclick=()=>toggleFn(fn);});
-    clone.querySelectorAll('.mode-chip').forEach(el=>{
-      const id=el.id;
-      if(id==='modeNormal') el.onclick=()=>setMode('normal');
-      if(id==='modeAbs')    el.onclick=()=>setMode('abs');
-      if(id==='modeSuperpos')el.onclick=()=>setMode('superpos');
-      if(id) el.id='m'+id;
-    });
-    clone.querySelectorAll('input[type=number]').forEach(el=>{
-      const oid=el.id;el.id='m'+oid;el.oninput=null;
-      el.addEventListener('input',function(){
-        if(oid==='nSP'){SP.p=+this.value;redraw();return;}
-        if(oid==='nSQ'){SP.q=+this.value;redraw();return;}
-        const m=oid.match(/^n([A-Z][a-z]+)([A-Za-z])$/);
-        if(!m)return;
-        P[m[1].toLowerCase()][m[2].toLowerCase()]=+this.value;redraw();
-      });
-    });
-    clone.querySelectorAll('input[type=range]').forEach(el=>{
-      const oid=el.id;el.id='m'+oid;el.oninput=null;
-      el.addEventListener('input',function(){
-        if(oid==='sSP'){SP.p=+this.value;redraw();return;}
-        if(oid==='sSQ'){SP.q=+this.value;redraw();return;}
-        const m=oid.match(/^s([A-Z][a-z]+)([A-Za-z])$/);
-        if(!m)return;
-        P[m[1].toLowerCase()][m[2].toLowerCase()]=+this.value;redraw();
-      });
-    });
-    dest.appendChild(clone);
-  });
+// ── On mobile: move the panel into the drawer so there's only ONE set of controls ──
+(function setupMobilePanel(){
+  const mq = window.matchMedia('(max-width:760px)');
+  function handleMQ(e){
+    const panel = document.getElementById('mainPanel');
+    const mobContent = document.getElementById('mobContent');
+    if(e.matches){
+      // Mobile: move panel into drawer
+      if(panel.parentElement !== mobContent){
+        mobContent.appendChild(panel);
+        panel.style.display = 'flex';
+        panel.style.width = '100%';
+        panel.style.borderRight = 'none';
+        panel.style.overflow = 'visible';
+      }
+    } else {
+      // Desktop: move panel back to main
+      const main = document.querySelector('.main');
+      if(panel.parentElement !== main){
+        main.insertBefore(panel, main.querySelector('canvas'));
+        panel.style.display = '';
+        panel.style.width = '';
+        panel.style.borderRight = '';
+        panel.style.overflow = '';
+      }
+    }
+  }
+  mq.addEventListener('change', handleMQ);
+  handleMQ(mq);
 })();
 
 // sp slider thumb colour
