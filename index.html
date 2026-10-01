@@ -4,40 +4,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>三角函數 — 互動教具</title>
+<link rel="stylesheet" href="./shared-shell.css">
 <style>
 :root{
-  --bg:#f4f5fa;--white:#fff;--surface2:#eef0f8;--border:#d8dcea;
+  --white:#fff;--surface2:#eef0f8;--border:#d8dcea;
   --accent:#3060e0;--sin-c:#c0392b;--cos-c:#2980b9;--tan-c:#27ae60;
   --csc-c:#e67e22;--sec-c:#8e44ad;--cot-c:#16a085;
   --sum-c:#7c3aed;
   --text:#1a1f36;--dim:#5a6280;--light:#9098b8;
-  --pw:420px;--f:'Times New Roman','Noto Serif TC',Georgia,serif;
+  --f:'Times New Roman','Noto Serif TC',Georgia,serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--f);background:var(--bg);color:var(--text);
-  overflow:hidden;height:100dvh;width:100vw;display:flex;flex-direction:column;font-size:16px;}
+body{font-size:16px;}
+.tts-app{font-family:var(--f);}
 
-header{height:64px;display:flex;align-items:center;padding:0 18px;background:var(--white);
-  border-bottom:1.5px solid var(--border);z-index:30;flex-shrink:0;gap:12px;}
 .logo-ph{height:38px;width:38px;background:var(--surface2);border:1.5px dashed #c0c8e0;
   border-radius:8px;display:flex;align-items:center;justify-content:center;
   font-size:10px;color:var(--light);text-align:center;line-height:1.3;}
 .logo-img{height:38px;width:auto;object-fit:contain;}
-.hd-sep{width:1px;height:32px;background:var(--border);flex-shrink:0;}
-.hd-title{flex:1;min-width:0;}
-.hd-title h1{font-size:21px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.hd-title p{font-size:13px;color:var(--dim);margin-top:2px;}
 .btn{padding:8px 18px;background:var(--surface2);border:1.5px solid var(--border);
   border-radius:8px;font-size:15px;color:var(--dim);cursor:pointer;
   font-family:var(--f);transition:all .15s;}
-.btn:hover{color:var(--accent);border-color:var(--accent);background:#eef2ff;}
+.btn:hover{color:var(--accent);border-color:var(--accent);background:#ffede5;}
 
-.main{display:flex;flex:1;overflow:hidden;position:relative;}
+.tts-left::-webkit-scrollbar{width:5px;}
+.tts-left::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 
-.panel{width:var(--pw);background:var(--white);border-right:1.5px solid var(--border);
-  display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;z-index:10;}
-.panel::-webkit-scrollbar{width:5px;}
-.panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 .sec{padding:12px 18px;border-bottom:1.5px solid var(--border);}
 .sec-title{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;
   letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:10px;}
@@ -58,7 +50,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
 .mode-chips{display:flex;gap:6px;flex-wrap:wrap;}
 .mode-chip{padding:6px 11px;border-radius:8px;border:1.5px solid var(--border);
   background:var(--surface2);font-family:var(--f);font-size:13px;color:var(--dim);cursor:pointer;transition:all .15s;}
-.mode-chip.on{background:#eef2ff;border-color:var(--accent);color:var(--accent);font-weight:700;}
+.mode-chip.on{background:#ffede5;border-color:var(--accent);color:var(--accent);font-weight:700;}
 
 .eq-box{background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;
   padding:9px 14px;font-size:17px;color:var(--text);margin-bottom:9px;
@@ -72,10 +64,15 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
 .eq-cot{border-left:3px solid var(--cot-c)!important;}
 
 .desc-box{background:#f0f4ff;border:1.5px solid #c8d4f8;border-radius:9px;
-  padding:8px 12px;font-size:13px;color:var(--dim);line-height:1.9;margin-bottom:9px;}
+  padding:8px 12px;font-size:13px;color:var(--dim);line-height:1.9;margin-bottom:0;}
 .desc-box b{color:var(--text);}
 .mode-desc{background:#fdf4ff;border-color:#d8b4fe;}
 
+.param-demo{background:#fff;border:1px solid var(--border);border-radius:8px;padding:9px 10px;margin-bottom:12px;line-height:1.65;}
+.param-demo__formula{font-size:18px;white-space:nowrap;}
+.param-demo__live{font-size:15px;margin-top:4px;overflow-wrap:anywhere;}
+.param-demo__guide{font-size:11px;color:var(--dim);margin-top:6px;line-height:1.7;}
+.param-a{color:#a93226;}.param-b{color:#21618c;}.param-c{color:#7d3c98;}.param-d{color:#117864;}
 .param-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
 .param-label{font-size:13px;color:var(--dim);width:80px;flex-shrink:0;}
 .param-label .vi{font-style:italic;font-weight:700;color:var(--text);}
@@ -117,292 +114,312 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
 .sp-result{background:#fdf4ff;border:1.5px solid #d8b4fe;border-radius:9px;
   padding:9px 13px;font-size:14px;line-height:2.1;color:var(--text);}
 
-#floatInfo{position:absolute;bottom:20px;right:20px;z-index:20;
-  min-width:260px;max-width:380px;background:rgba(255,255,255,.96);
-  border:1.5px solid var(--border);border-radius:14px;padding:13px 15px;
-  box-shadow:0 4px 20px rgba(26,31,54,.10);
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  font-family:var(--f);pointer-events:none;}
-.fi-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;line-height:1.8;}
-.fi-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:5px;}
-.fi-text{font-size:14px;color:var(--text);font-style:italic;}
-
-#canvas{flex:1;display:block;cursor:default;touch-action:none;background:#fff;}
-
-.fab{display:none;position:fixed;bottom:20px;left:20px;width:54px;height:54px;
-  border-radius:50%;background:var(--accent);color:#fff;border:none;font-size:22px;
-  cursor:pointer;box-shadow:0 4px 20px rgba(48,96,224,.4);z-index:200;
-  align-items:center;justify-content:center;}
-.mob-overlay{display:none;position:fixed;inset:0;z-index:100;pointer-events:none;}
-.mob-overlay.open{pointer-events:none;}
-.mob-bg{position:absolute;inset:0;background:rgba(10,15,40,.35);opacity:0;
-  transition:opacity .28s;pointer-events:none;}
-.mob-overlay.open .mob-bg{opacity:1;pointer-events:all;}
-.mob-drawer{position:absolute;top:0;left:0;bottom:0;width:min(92vw,440px);
-  background:var(--white);border-right:1.5px solid var(--border);
-  overflow-y:auto;-webkit-overflow-scrolling:touch;
-  transform:translateX(-100%);transition:transform .32s cubic-bezier(.32,.72,0,1);
-  z-index:2;pointer-events:all;}
-.mob-overlay.open .mob-drawer{transform:translateX(0);}
-.mob-dh{display:flex;align-items:center;justify-content:space-between;
-  padding:16px 20px;border-bottom:1.5px solid var(--border);}
-.mob-dt{font-size:18px;font-weight:700;}
-.mob-x{width:44px;height:44px;border-radius:8px;background:var(--surface2);
-  border:1.5px solid var(--border);font-size:20px;color:var(--dim);
-  cursor:pointer;display:flex;align-items:center;justify-content:center;}
-@media(max-width:760px){
-  .panel{display:none;}.fab{display:flex;}.mob-overlay{display:block;}
-  .hd-title p{display:none;}.hd-title h1{font-size:18px;}
-  #floatInfo{max-width:calc(100vw - 44px);}
-}
+#canvas{width:100%;height:100%;display:block;cursor:default;touch-action:none;background:#fff;}
 </style>
 </head>
 <body>
+  <div class="tts-app">
+    <header class="tts-header">
+      <div class="tts-header__logo">
+        <img class="logo-img" src="company-logo.png"
+             onerror="this.style.display='none';document.getElementById('lgph').style.display='flex';" alt="">
+        <div class="logo-ph" id="lgph" style="display:none">LOGO</div>
+      </div>
+      <div class="tts-header__divider"></div>
+      <div class="tts-header__titles">
+        <h1>三角函數</h1>
+        <p>觀察三角函數圖形：平移、伸縮及疊合</p>
+      </div>
+    </header>
 
-<header>
-  <div style="display:flex;align-items:center;flex-shrink:0;">
-    <img class="logo-img" src="company-logo.png"
-         onerror="this.style.display='none';document.getElementById('lgph').style.display='flex';" alt="">
-    <div class="logo-ph" id="lgph" style="display:none">LOGO</div>
+    <div class="tts-body">
+      <aside class="tts-left">
+        <div class="tts-left__controls">
+          <div class="tts-left__controls-head">
+            <span class="tts-left__controls-label"><span class="tts-dot"></span>參數設定</span>
+            <button class="btn" onclick="resetAll()">↺ 重置</button>
+          </div>
+          <div class="tts-left__controls-body">
+
+            <!-- 顯示函數 -->
+            <div class="sec">
+              <div class="sec-title"><span class="sec-dot" style="background:var(--accent)"></span>顯示函數（可複選）</div>
+              <div class="fn-chips" id="fnChipsRow">
+                <button class="fn-chip on" data-fn="sin" onclick="toggleFn('sin')">sin</button>
+                <button class="fn-chip"    data-fn="cos" onclick="toggleFn('cos')">cos</button>
+                <button class="fn-chip"    data-fn="tan" onclick="toggleFn('tan')">tan</button>
+                <button class="fn-chip"    data-fn="csc" onclick="toggleFn('csc')">csc</button>
+                <button class="fn-chip"    data-fn="sec" onclick="toggleFn('sec')">sec</button>
+                <button class="fn-chip"    data-fn="cot" onclick="toggleFn('cot')">cot</button>
+              </div>
+            </div>
+
+            <!-- 模式 -->
+            <div class="sec">
+              <div class="sec-title"><span class="sec-dot" style="background:var(--dim)"></span>圖形模式</div>
+              <div class="mode-chips">
+                <button class="mode-chip on" id="modeNormal"   onclick="setMode('normal')">一般</button>
+                <button class="mode-chip"    id="modeAbs"      onclick="setMode('abs')">絕對值 |<i>f</i>(<i>x</i>)|</button>
+                <button class="mode-chip"    id="modeSuperpos" onclick="setMode('superpos')">正餘弦疊合</button>
+              </div>
+              <div id="modeDesc" class="desc-box mode-desc" style="display:none;margin-top:8px;margin-bottom:0;"></div>
+            </div>
+
+            <!-- ── sin ── -->
+            <div class="sec" id="sinSecCtrl">
+              <div class="fn-panel-hd"><span class="dot" style="background:var(--sin-c)"></span>sin 參數</div>
+              <div class="param-demo">
+                <div class="param-demo__formula" id="sinTemplate"></div>
+                <div class="param-demo__live" id="sinLive"></div>
+                <div class="param-demo__guide"><b class="param-a">a</b>：上下伸縮（負值上下翻轉）<br><b class="param-b">b</b>：左右伸縮（負值左右翻轉）<br><b class="param-c">c</b>：左右平移，位移量 −c/b（b ≠ 0）<br><b class="param-d">d</b>：上下平移</div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
+                <div class="param-num"><input class="i-sin" id="nSinA" type="number" step="0.1" value="1" oninput="P.sin.a=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-sin" id="sSinA" min="-4" max="4" step="0.05" value="1" oninput="P.sin.a=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">b</span> 左右伸縮</div>
+                <div class="param-num"><input class="i-sin" id="nSinB" type="number" step="0.1" value="1" oninput="P.sin.b=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-sin" id="sSinB" min="-4" max="4" step="0.05" value="1" oninput="P.sin.b=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">c</span> 左右平移</div>
+                <div class="param-num"><input class="i-sin" id="nSinC" type="number" step="0.1" value="0" oninput="P.sin.c=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-sin" id="sSinC" min="-6.28" max="6.28" step="0.05" value="0" oninput="P.sin.c=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">d</span> 上下平移</div>
+                <div class="param-num"><input class="i-sin" id="nSinD" type="number" step="0.1" value="0" oninput="P.sin.d=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-sin" id="sSinD" min="-4" max="4" step="0.05" value="0" oninput="P.sin.d=+this.value;redraw()"></div>
+              </div>
+            </div>
+
+            <!-- ── cos ── -->
+            <div class="sec" id="cosSecCtrl" style="display:none">
+              <div class="fn-panel-hd"><span class="dot" style="background:var(--cos-c)"></span>cos 參數</div>
+              <div class="param-demo">
+                <div class="param-demo__formula" id="cosTemplate"></div>
+                <div class="param-demo__live" id="cosLive"></div>
+                <div class="param-demo__guide"><b class="param-a">a</b>：上下伸縮（負值上下翻轉）<br><b class="param-b">b</b>：左右伸縮（負值左右翻轉）<br><b class="param-c">c</b>：左右平移，位移量 −c/b（b ≠ 0）<br><b class="param-d">d</b>：上下平移</div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
+                <div class="param-num"><input class="i-cos" id="nCosA" type="number" step="0.1" value="1" oninput="P.cos.a=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-cos" id="sCosA" min="-4" max="4" step="0.05" value="1" oninput="P.cos.a=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">b</span> 左右伸縮</div>
+                <div class="param-num"><input class="i-cos" id="nCosB" type="number" step="0.1" value="1" oninput="P.cos.b=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-cos" id="sCosB" min="-4" max="4" step="0.05" value="1" oninput="P.cos.b=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">c</span> 左右平移</div>
+                <div class="param-num"><input class="i-cos" id="nCosC" type="number" step="0.1" value="0" oninput="P.cos.c=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-cos" id="sCosC" min="-6.28" max="6.28" step="0.05" value="0" oninput="P.cos.c=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">d</span> 上下平移</div>
+                <div class="param-num"><input class="i-cos" id="nCosD" type="number" step="0.1" value="0" oninput="P.cos.d=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-cos" id="sCosD" min="-4" max="4" step="0.05" value="0" oninput="P.cos.d=+this.value;redraw()"></div>
+              </div>
+            </div>
+
+            <!-- ── tan ── -->
+            <div class="sec" id="tanSecCtrl" style="display:none">
+              <div class="fn-panel-hd"><span class="dot" style="background:var(--tan-c)"></span>tan 參數</div>
+              <div class="param-demo">
+                <div class="param-demo__formula" id="tanTemplate"></div>
+                <div class="param-demo__live" id="tanLive"></div>
+                <div class="param-demo__guide"><b class="param-a">a</b>：上下伸縮（負值上下翻轉）<br><b class="param-b">b</b>：左右伸縮（負值左右翻轉）<br><b class="param-c">c</b>：左右平移，位移量 −c/b（b ≠ 0）<br><b class="param-d">d</b>：上下平移</div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
+                <div class="param-num"><input class="i-tan" id="nTanA" type="number" step="0.1" value="1" oninput="P.tan.a=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-tan" id="sTanA" min="-4" max="4" step="0.05" value="1" oninput="P.tan.a=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">b</span> 左右伸縮</div>
+                <div class="param-num"><input class="i-tan" id="nTanB" type="number" step="0.1" value="1" oninput="P.tan.b=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-tan" id="sTanB" min="-4" max="4" step="0.05" value="1" oninput="P.tan.b=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">c</span> 左右平移</div>
+                <div class="param-num"><input class="i-tan" id="nTanC" type="number" step="0.1" value="0" oninput="P.tan.c=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-tan" id="sTanC" min="-6.28" max="6.28" step="0.05" value="0" oninput="P.tan.c=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">d</span> 上下平移</div>
+                <div class="param-num"><input class="i-tan" id="nTanD" type="number" step="0.1" value="0" oninput="P.tan.d=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-tan" id="sTanD" min="-4" max="4" step="0.05" value="0" oninput="P.tan.d=+this.value;redraw()"></div>
+              </div>
+            </div>
+
+            <!-- ── csc ── -->
+            <div class="sec" id="cscSecCtrl" style="display:none">
+              <div class="fn-panel-hd"><span class="dot" style="background:var(--csc-c)"></span>csc 參數</div>
+              <div class="param-demo">
+                <div class="param-demo__formula" id="cscTemplate"></div>
+                <div class="param-demo__live" id="cscLive"></div>
+                <div class="param-demo__guide"><b class="param-a">a</b>：上下伸縮（負值上下翻轉）<br><b class="param-b">b</b>：左右伸縮（負值左右翻轉）<br><b class="param-c">c</b>：左右平移，位移量 −c/b（b ≠ 0）<br><b class="param-d">d</b>：上下平移</div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
+                <div class="param-num"><input class="i-csc" id="nCscA" type="number" step="0.1" value="1" oninput="P.csc.a=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-csc" id="sCscA" min="-4" max="4" step="0.05" value="1" oninput="P.csc.a=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">b</span> 左右伸縮</div>
+                <div class="param-num"><input class="i-csc" id="nCscB" type="number" step="0.1" value="1" oninput="P.csc.b=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-csc" id="sCscB" min="-4" max="4" step="0.05" value="1" oninput="P.csc.b=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">c</span> 左右平移</div>
+                <div class="param-num"><input class="i-csc" id="nCscC" type="number" step="0.1" value="0" oninput="P.csc.c=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-csc" id="sCscC" min="-6.28" max="6.28" step="0.05" value="0" oninput="P.csc.c=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">d</span> 上下平移</div>
+                <div class="param-num"><input class="i-csc" id="nCscD" type="number" step="0.1" value="0" oninput="P.csc.d=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-csc" id="sCscD" min="-4" max="4" step="0.05" value="0" oninput="P.csc.d=+this.value;redraw()"></div>
+              </div>
+            </div>
+
+            <!-- ── sec ── -->
+            <div class="sec" id="secSecCtrl" style="display:none">
+              <div class="fn-panel-hd"><span class="dot" style="background:var(--sec-c)"></span>sec 參數</div>
+              <div class="param-demo">
+                <div class="param-demo__formula" id="secTemplate"></div>
+                <div class="param-demo__live" id="secLive"></div>
+                <div class="param-demo__guide"><b class="param-a">a</b>：上下伸縮（負值上下翻轉）<br><b class="param-b">b</b>：左右伸縮（負值左右翻轉）<br><b class="param-c">c</b>：左右平移，位移量 −c/b（b ≠ 0）<br><b class="param-d">d</b>：上下平移</div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
+                <div class="param-num"><input class="i-sec" id="nSecA" type="number" step="0.1" value="1" oninput="P.sec.a=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-sec" id="sSecA" min="-4" max="4" step="0.05" value="1" oninput="P.sec.a=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">b</span> 左右伸縮</div>
+                <div class="param-num"><input class="i-sec" id="nSecB" type="number" step="0.1" value="1" oninput="P.sec.b=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-sec" id="sSecB" min="-4" max="4" step="0.05" value="1" oninput="P.sec.b=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">c</span> 左右平移</div>
+                <div class="param-num"><input class="i-sec" id="nSecC" type="number" step="0.1" value="0" oninput="P.sec.c=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-sec" id="sSecC" min="-6.28" max="6.28" step="0.05" value="0" oninput="P.sec.c=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">d</span> 上下平移</div>
+                <div class="param-num"><input class="i-sec" id="nSecD" type="number" step="0.1" value="0" oninput="P.sec.d=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-sec" id="sSecD" min="-4" max="4" step="0.05" value="0" oninput="P.sec.d=+this.value;redraw()"></div>
+              </div>
+            </div>
+
+            <!-- ── cot ── -->
+            <div class="sec" id="cotSecCtrl" style="display:none">
+              <div class="fn-panel-hd"><span class="dot" style="background:var(--cot-c)"></span>cot 參數</div>
+              <div class="param-demo">
+                <div class="param-demo__formula" id="cotTemplate"></div>
+                <div class="param-demo__live" id="cotLive"></div>
+                <div class="param-demo__guide"><b class="param-a">a</b>：上下伸縮（負值上下翻轉）<br><b class="param-b">b</b>：左右伸縮（負值左右翻轉）<br><b class="param-c">c</b>：左右平移，位移量 −c/b（b ≠ 0）<br><b class="param-d">d</b>：上下平移</div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
+                <div class="param-num"><input class="i-cot" id="nCotA" type="number" step="0.1" value="1" oninput="P.cot.a=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-cot" id="sCotA" min="-4" max="4" step="0.05" value="1" oninput="P.cot.a=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">b</span> 左右伸縮</div>
+                <div class="param-num"><input class="i-cot" id="nCotB" type="number" step="0.1" value="1" oninput="P.cot.b=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-cot" id="sCotB" min="-4" max="4" step="0.05" value="1" oninput="P.cot.b=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">c</span> 左右平移</div>
+                <div class="param-num"><input class="i-cot" id="nCotC" type="number" step="0.1" value="0" oninput="P.cot.c=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-cot" id="sCotC" min="-6.28" max="6.28" step="0.05" value="0" oninput="P.cot.c=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">d</span> 上下平移</div>
+                <div class="param-num"><input class="i-cot" id="nCotD" type="number" step="0.1" value="0" oninput="P.cot.d=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" class="r-cot" id="sCotD" min="-4" max="4" step="0.05" value="0" oninput="P.cot.d=+this.value;redraw()"></div>
+              </div>
+            </div>
+
+            <!-- ── 正餘弦疊合 ── -->
+            <div class="sec" id="superposSecCtrl" style="display:none">
+              <div class="fn-panel-hd"><span class="dot" style="background:var(--sum-c)"></span>正餘弦疊合參數</div>
+              <div style="font-size:13px;color:var(--dim);margin-bottom:8px;">
+                設 <i>y</i> = <i>p</i>·sin <i>x</i> + <i>q</i>·cos <i>x</i>，調整係數：
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">p</span> sin 係數</div>
+                <div class="param-num"><input id="nSP" type="number" step="0.1" value="1" style="width:100%;background:var(--white);border:1.5px solid var(--border);border-radius:7px;padding:6px 8px;font-family:var(--f);font-size:15px;font-style:normal;color:var(--text);outline:none;-moz-appearance:textfield;" oninput="SP.p=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" id="sSP" min="-5" max="5" step="0.05" value="1" class="r-sp" oninput="SP.p=+this.value;redraw()"></div>
+              </div>
+              <div class="param-row">
+                <div class="param-label"><span class="vi">q</span> cos 係數</div>
+                <div class="param-num"><input id="nSQ" type="number" step="0.1" value="1" style="width:100%;background:var(--white);border:1.5px solid var(--border);border-radius:7px;padding:6px 8px;font-family:var(--f);font-size:15px;font-style:normal;color:var(--text);outline:none;-moz-appearance:textfield;" oninput="SP.q=+this.value;redraw()"></div>
+                <div class="param-slider"><input type="range" id="sSQ" min="-5" max="5" step="0.05" value="1" class="r-sp" oninput="SP.q=+this.value;redraw()"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </aside>
+
+      <main class="tts-main">
+        <div class="tts-main__card" id="viewportCard">
+          <canvas id="canvas"></canvas>
+        </div>
+      </main>
+
+      <aside class="tts-right">
+        <div class="tts-right__inner">
+          <div class="sec" id="sinSecTheory">
+            <div class="fn-panel-hd"><span class="dot" style="background:var(--sin-c)"></span>sin 方程式</div>
+            <div class="eq-box eq-sin" id="sinEq"></div>
+            <div class="desc-box" id="sinDesc"></div>
+          </div>
+          <div class="sec" id="cosSecTheory" style="display:none">
+            <div class="fn-panel-hd"><span class="dot" style="background:var(--cos-c)"></span>cos 方程式</div>
+            <div class="eq-box eq-cos" id="cosEq"></div>
+            <div class="desc-box" id="cosDesc"></div>
+          </div>
+          <div class="sec" id="tanSecTheory" style="display:none">
+            <div class="fn-panel-hd"><span class="dot" style="background:var(--tan-c)"></span>tan 方程式</div>
+            <div class="eq-box eq-tan" id="tanEq"></div>
+            <div class="desc-box" id="tanDesc"></div>
+          </div>
+          <div class="sec" id="cscSecTheory" style="display:none">
+            <div class="fn-panel-hd"><span class="dot" style="background:var(--csc-c)"></span>csc 方程式</div>
+            <div class="eq-box eq-csc" id="cscEq"></div>
+            <div class="desc-box" id="cscDesc"></div>
+          </div>
+          <div class="sec" id="secSecTheory" style="display:none">
+            <div class="fn-panel-hd"><span class="dot" style="background:var(--sec-c)"></span>sec 方程式</div>
+            <div class="eq-box eq-sec" id="secEq"></div>
+            <div class="desc-box" id="secDesc"></div>
+          </div>
+          <div class="sec" id="cotSecTheory" style="display:none">
+            <div class="fn-panel-hd"><span class="dot" style="background:var(--cot-c)"></span>cot 方程式</div>
+            <div class="eq-box eq-cot" id="cotEq"></div>
+            <div class="desc-box" id="cotDesc"></div>
+          </div>
+          <div class="sec" id="superposSecTheory" style="display:none">
+            <div class="fn-panel-hd"><span class="dot" style="background:var(--sum-c)"></span>正餘弦疊合結果</div>
+            <div class="sp-result" id="spResult"></div>
+          </div>
+
+          <div class="tts-right__section-title"><span class="tts-dot"></span>公式或學理介紹</div>
+          <div class="tts-right__prose">
+            <p>一般型 <span class="tts-formula">y = a·f(bx + c) + d</span> 中：<span class="tts-formula">a</span> 控制上下伸縮（振幅）、<span class="tts-formula">b</span> 控制左右伸縮（進而改變週期）、<span class="tts-formula">c</span> 控制左右平移（相位）、<span class="tts-formula">d</span> 控制上下平移。左側勾選的函數，對應的方程式與詳細說明會顯示在下方。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
   </div>
-  <div class="hd-sep"></div>
-  <div class="hd-title">
-    <h1>三角函數</h1>
-    <p>觀察三角函數圖形：平移、伸縮及疊合</p>
-  </div>
-  <div style="flex-shrink:0;">
-    <button class="btn" onclick="resetAll()">↺ 重置</button>
-  </div>
-</header>
 
-<div class="main">
-
-<div class="panel" id="mainPanel">
-
-  <!-- 顯示函數 -->
-  <div class="sec">
-    <div class="sec-title"><span class="sec-dot" style="background:var(--accent)"></span>顯示函數（可複選）</div>
-    <div class="fn-chips" id="fnChipsRow">
-      <button class="fn-chip on" data-fn="sin" onclick="toggleFn('sin')">sin</button>
-      <button class="fn-chip"    data-fn="cos" onclick="toggleFn('cos')">cos</button>
-      <button class="fn-chip"    data-fn="tan" onclick="toggleFn('tan')">tan</button>
-      <button class="fn-chip"    data-fn="csc" onclick="toggleFn('csc')">csc</button>
-      <button class="fn-chip"    data-fn="sec" onclick="toggleFn('sec')">sec</button>
-      <button class="fn-chip"    data-fn="cot" onclick="toggleFn('cot')">cot</button>
-    </div>
-  </div>
-
-  <!-- 模式 -->
-  <div class="sec">
-    <div class="sec-title"><span class="sec-dot" style="background:var(--dim)"></span>圖形模式</div>
-    <div class="mode-chips">
-      <button class="mode-chip on" id="modeNormal"   onclick="setMode('normal')">一般</button>
-      <button class="mode-chip"    id="modeAbs"      onclick="setMode('abs')">絕對值 |<i>f</i>(<i>x</i>)|</button>
-      <button class="mode-chip"    id="modeSuperpos" onclick="setMode('superpos')">正餘弦疊合</button>
-    </div>
-    <div id="modeDesc" class="desc-box mode-desc" style="display:none;margin-top:8px;margin-bottom:0;"></div>
-  </div>
-
-  <!-- ── sin ── -->
-  <div class="sec" id="sinSec">
-    <div class="fn-panel-hd"><span class="dot" style="background:var(--sin-c)"></span>sin 參數</div>
-    <div class="eq-box eq-sin" id="sinEq"></div>
-    <div class="desc-box" id="sinDesc"></div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
-      <div class="param-num"><input class="i-sin" id="nSinA" type="number" step="0.1" value="1" oninput="P.sin.a=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-sin" id="sSinA" min="-4" max="4" step="0.05" value="1" oninput="P.sin.a=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">b</span> 左右伸縮</div>
-      <div class="param-num"><input class="i-sin" id="nSinB" type="number" step="0.1" value="1" oninput="P.sin.b=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-sin" id="sSinB" min="-4" max="4" step="0.05" value="1" oninput="P.sin.b=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">c</span> 左右平移</div>
-      <div class="param-num"><input class="i-sin" id="nSinC" type="number" step="0.1" value="0" oninput="P.sin.c=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-sin" id="sSinC" min="-6.28" max="6.28" step="0.05" value="0" oninput="P.sin.c=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">d</span> 上下平移</div>
-      <div class="param-num"><input class="i-sin" id="nSinD" type="number" step="0.1" value="0" oninput="P.sin.d=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-sin" id="sSinD" min="-4" max="4" step="0.05" value="0" oninput="P.sin.d=+this.value;redraw()"></div>
-    </div>
-  </div>
-
-  <!-- ── cos ── -->
-  <div class="sec" id="cosSec" style="display:none">
-    <div class="fn-panel-hd"><span class="dot" style="background:var(--cos-c)"></span>cos 參數</div>
-    <div class="eq-box eq-cos" id="cosEq"></div>
-    <div class="desc-box" id="cosDesc"></div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
-      <div class="param-num"><input class="i-cos" id="nCosA" type="number" step="0.1" value="1" oninput="P.cos.a=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-cos" id="sCosA" min="-4" max="4" step="0.05" value="1" oninput="P.cos.a=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">b</span> 左右伸縮</div>
-      <div class="param-num"><input class="i-cos" id="nCosB" type="number" step="0.1" value="1" oninput="P.cos.b=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-cos" id="sCosB" min="-4" max="4" step="0.05" value="1" oninput="P.cos.b=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">c</span> 左右平移</div>
-      <div class="param-num"><input class="i-cos" id="nCosC" type="number" step="0.1" value="0" oninput="P.cos.c=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-cos" id="sCosC" min="-6.28" max="6.28" step="0.05" value="0" oninput="P.cos.c=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">d</span> 上下平移</div>
-      <div class="param-num"><input class="i-cos" id="nCosD" type="number" step="0.1" value="0" oninput="P.cos.d=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-cos" id="sCosD" min="-4" max="4" step="0.05" value="0" oninput="P.cos.d=+this.value;redraw()"></div>
-    </div>
-  </div>
-
-  <!-- ── tan ── -->
-  <div class="sec" id="tanSec" style="display:none">
-    <div class="fn-panel-hd"><span class="dot" style="background:var(--tan-c)"></span>tan 參數</div>
-    <div class="eq-box eq-tan" id="tanEq"></div>
-    <div class="desc-box" id="tanDesc"></div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
-      <div class="param-num"><input class="i-tan" id="nTanA" type="number" step="0.1" value="1" oninput="P.tan.a=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-tan" id="sTanA" min="-4" max="4" step="0.05" value="1" oninput="P.tan.a=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">b</span> 左右伸縮</div>
-      <div class="param-num"><input class="i-tan" id="nTanB" type="number" step="0.1" value="1" oninput="P.tan.b=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-tan" id="sTanB" min="-4" max="4" step="0.05" value="1" oninput="P.tan.b=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">c</span> 左右平移</div>
-      <div class="param-num"><input class="i-tan" id="nTanC" type="number" step="0.1" value="0" oninput="P.tan.c=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-tan" id="sTanC" min="-6.28" max="6.28" step="0.05" value="0" oninput="P.tan.c=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">d</span> 上下平移</div>
-      <div class="param-num"><input class="i-tan" id="nTanD" type="number" step="0.1" value="0" oninput="P.tan.d=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-tan" id="sTanD" min="-4" max="4" step="0.05" value="0" oninput="P.tan.d=+this.value;redraw()"></div>
-    </div>
-  </div>
-
-  <!-- ── csc ── -->
-  <div class="sec" id="cscSec" style="display:none">
-    <div class="fn-panel-hd"><span class="dot" style="background:var(--csc-c)"></span>csc 參數</div>
-    <div class="eq-box eq-csc" id="cscEq"></div>
-    <div class="desc-box" id="cscDesc"></div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
-      <div class="param-num"><input class="i-csc" id="nCscA" type="number" step="0.1" value="1" oninput="P.csc.a=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-csc" id="sCscA" min="-4" max="4" step="0.05" value="1" oninput="P.csc.a=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">b</span> 左右伸縮</div>
-      <div class="param-num"><input class="i-csc" id="nCscB" type="number" step="0.1" value="1" oninput="P.csc.b=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-csc" id="sCscB" min="-4" max="4" step="0.05" value="1" oninput="P.csc.b=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">c</span> 左右平移</div>
-      <div class="param-num"><input class="i-csc" id="nCscC" type="number" step="0.1" value="0" oninput="P.csc.c=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-csc" id="sCscC" min="-6.28" max="6.28" step="0.05" value="0" oninput="P.csc.c=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">d</span> 上下平移</div>
-      <div class="param-num"><input class="i-csc" id="nCscD" type="number" step="0.1" value="0" oninput="P.csc.d=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-csc" id="sCscD" min="-4" max="4" step="0.05" value="0" oninput="P.csc.d=+this.value;redraw()"></div>
-    </div>
-  </div>
-
-  <!-- ── sec ── -->
-  <div class="sec" id="secSec" style="display:none">
-    <div class="fn-panel-hd"><span class="dot" style="background:var(--sec-c)"></span>sec 參數</div>
-    <div class="eq-box eq-sec" id="secEq"></div>
-    <div class="desc-box" id="secDesc"></div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
-      <div class="param-num"><input class="i-sec" id="nSecA" type="number" step="0.1" value="1" oninput="P.sec.a=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-sec" id="sSecA" min="-4" max="4" step="0.05" value="1" oninput="P.sec.a=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">b</span> 左右伸縮</div>
-      <div class="param-num"><input class="i-sec" id="nSecB" type="number" step="0.1" value="1" oninput="P.sec.b=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-sec" id="sSecB" min="-4" max="4" step="0.05" value="1" oninput="P.sec.b=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">c</span> 左右平移</div>
-      <div class="param-num"><input class="i-sec" id="nSecC" type="number" step="0.1" value="0" oninput="P.sec.c=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-sec" id="sSecC" min="-6.28" max="6.28" step="0.05" value="0" oninput="P.sec.c=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">d</span> 上下平移</div>
-      <div class="param-num"><input class="i-sec" id="nSecD" type="number" step="0.1" value="0" oninput="P.sec.d=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-sec" id="sSecD" min="-4" max="4" step="0.05" value="0" oninput="P.sec.d=+this.value;redraw()"></div>
-    </div>
-  </div>
-
-  <!-- ── cot ── -->
-  <div class="sec" id="cotSec" style="display:none">
-    <div class="fn-panel-hd"><span class="dot" style="background:var(--cot-c)"></span>cot 參數</div>
-    <div class="eq-box eq-cot" id="cotEq"></div>
-    <div class="desc-box" id="cotDesc"></div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
-      <div class="param-num"><input class="i-cot" id="nCotA" type="number" step="0.1" value="1" oninput="P.cot.a=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-cot" id="sCotA" min="-4" max="4" step="0.05" value="1" oninput="P.cot.a=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">b</span> 左右伸縮</div>
-      <div class="param-num"><input class="i-cot" id="nCotB" type="number" step="0.1" value="1" oninput="P.cot.b=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-cot" id="sCotB" min="-4" max="4" step="0.05" value="1" oninput="P.cot.b=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">c</span> 左右平移</div>
-      <div class="param-num"><input class="i-cot" id="nCotC" type="number" step="0.1" value="0" oninput="P.cot.c=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-cot" id="sCotC" min="-6.28" max="6.28" step="0.05" value="0" oninput="P.cot.c=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">d</span> 上下平移</div>
-      <div class="param-num"><input class="i-cot" id="nCotD" type="number" step="0.1" value="0" oninput="P.cot.d=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" class="r-cot" id="sCotD" min="-4" max="4" step="0.05" value="0" oninput="P.cot.d=+this.value;redraw()"></div>
-    </div>
-  </div>
-
-  <!-- ── 正餘弦疊合 ── -->
-  <div class="sec" id="superposSec" style="display:none">
-    <div class="fn-panel-hd"><span class="dot" style="background:var(--sum-c)"></span>正餘弦疊合參數</div>
-    <div style="font-size:13px;color:var(--dim);margin-bottom:8px;">
-      設 <i>y</i> = <i>p</i>·sin <i>x</i> + <i>q</i>·cos <i>x</i>，調整係數：
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">p</span> sin 係數</div>
-      <div class="param-num"><input id="nSP" type="number" step="0.1" value="1" style="width:100%;background:var(--white);border:1.5px solid var(--border);border-radius:7px;padding:6px 8px;font-family:var(--f);font-size:15px;font-style:normal;color:var(--text);outline:none;-moz-appearance:textfield;" oninput="SP.p=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" id="sSP" min="-5" max="5" step="0.05" value="1" class="r-sp" oninput="SP.p=+this.value;redraw()"></div>
-    </div>
-    <div class="param-row">
-      <div class="param-label"><span class="vi">q</span> cos 係數</div>
-      <div class="param-num"><input id="nSQ" type="number" step="0.1" value="1" style="width:100%;background:var(--white);border:1.5px solid var(--border);border-radius:7px;padding:6px 8px;font-family:var(--f);font-size:15px;font-style:normal;color:var(--text);outline:none;-moz-appearance:textfield;" oninput="SP.q=+this.value;redraw()"></div>
-      <div class="param-slider"><input type="range" id="sSQ" min="-5" max="5" step="0.05" value="1" class="r-sp" oninput="SP.q=+this.value;redraw()"></div>
-    </div>
-    <div class="sp-result" id="spResult"></div>
-  </div>
-
-</div><!-- /panel -->
-
-<canvas id="canvas"></canvas>
-
-<div id="floatInfo"><div id="fiContent"></div></div>
-</div>
-
-<button class="fab" id="fabBtn" onclick="toggleDrawer()">☰</button>
-<div class="mob-overlay" id="MOV">
-  <div class="mob-bg" onclick="closeDrawer()"></div>
-  <div class="mob-drawer">
-    <div class="mob-dh">
-      <span class="mob-dt">方程式與設定</span>
-      <button class="mob-x" onclick="closeDrawer()">✕</button>
-    </div>
-    <div id="mobContent"></div>
-  </div>
-</div>
-
+<script src="./shared-shell.js"></script>
 <script>
 const FNS=['sin','cos','tan','csc','sec','cot'];
 const FN_COLOR={
@@ -430,19 +447,15 @@ const ctx=canvas.getContext('2d');
 let dpr=window.devicePixelRatio||1;
 let originX=0,originY=0,scale=60,_init=false;
 
-function resize(){
-  const main=document.querySelector('.main');
-  const panel=document.querySelector('.panel');
-  const pw=panel?panel.offsetWidth:0;
-  const W0=main.offsetWidth-pw;
-  const H0=main.offsetHeight;
+function resizeToRect(rect){
+  const W0=rect.width, H0=rect.height;
   canvas.width=W0*dpr; canvas.height=H0*dpr;
   canvas.style.width=W0+'px'; canvas.style.height=H0+'px';
   ctx.setTransform(dpr,0,0,dpr,0,0);
   if(!_init){originX=W0/2;originY=H0/2;_init=true;}
   redraw();
 }
-window.addEventListener('resize',resize);
+TTS.observeContainer(document.getElementById('viewportCard'), resizeToRect);
 
 const toMx=sx=>(sx-originX)/scale;
 const toSy=my=>originY-my*scale;
@@ -702,7 +715,7 @@ function descHTML(fn){
   const T=period(fn);
   const Ts=isFinite(T)?f2(T/Math.PI)+'π':'∞';
   if(Math.abs(ab-1)>0.01){
-    if(ab>1) lines.push(`${vi('b')} = ${f2(b)}，<b>左右壓縮為 1/${f2(ab)} 倍</b>，週期 = ${Ts}`);
+    if(ab>1) lines.push(`${vi('b')} = ${f2(b)}，<b>左右壓縮為 ${TTS.frac('1', f2(ab))} 倍</b>，週期 = ${Ts}`);
     else     lines.push(`${vi('b')} = ${f2(b)}，<b>左右伸縮 ${f2(1/ab)} 倍</b>，週期 = ${Ts}`);
   } else {
     lines.push(`週期 = ${Ts}`);
@@ -736,7 +749,7 @@ function thetaStr(theta){
       const sign=n<0?'−':'';
       const an=Math.abs(n);
       if(d===1) return an===1?sign+'π':sign+an+'π';
-      return an===1?sign+'π/'+d:sign+an+'π/'+d;
+      return sign+TTS.frac(an===1?'π':an+'π', d);
     }
   }
   return f3(theta);
@@ -754,7 +767,7 @@ function spResultHTML(){
   return `
 <div style="line-height:2.1;font-size:14px;">
   ${vi('y')} = ${vn(f2(p))}·sin ${vi('x')} + ${vn(f2(q))}·cos ${vi('x')}<br>
-  &nbsp;&nbsp;= ${vn(Rstr)}·(${vn(f2(p)+'/'+(Rstr||1))}·sin ${vi('x')} + ${vn(f2(q)+'/'+(Rstr||1))}·cos ${vi('x')})<br>
+  &nbsp;&nbsp;= ${vn(Rstr)}·(${vn(TTS.frac(f2(p), Rstr||1))}·sin ${vi('x')} + ${vn(TTS.frac(f2(q), Rstr||1))}·cos ${vi('x')})<br>
   &nbsp;&nbsp;= ${vn(Rstr)}·(sin ${vi('x')}·cos${vi('θ')} + cos ${vi('x')}·sin${vi('θ')})<br>
   &nbsp;&nbsp;= <b style="color:${SUM_C}">${vn(Rstr)}·sin(${vi('x')} + ${vn(tStr)})</b>
 </div>
@@ -774,6 +787,10 @@ function safeSet(id,v){const e=document.getElementById(id);if(e&&document.active
 function updatePanel(){
   FNS.forEach(fn=>{
     sH(fn+'Eq',eqHTML(fn));
+    const letter=k=>`<i class="param-${k}">${k}</i>`;
+    const template=`${letter('a')} · ${fn}(${letter('b')}<i>x</i> + ${letter('c')}) + ${letter('d')}`;
+    sH(fn+'Template',`<i>y</i> = ${graphMode==='abs'?'|'+template+'|':template}`);
+    sH(fn+'Live',eqHTML(fn));
     sH(fn+'Desc',descHTML(fn));
   });
   FNS.forEach(fn=>{
@@ -799,11 +816,16 @@ function updatePanel(){
   if(isSP){visible.sin=true;visible.cos=true;}
 
   FNS.forEach(fn=>{
-    const e=document.getElementById(fn+'Sec');
-    if(e) e.style.display=(visible[fn]&&!isSP)?'block':'none';
+    const show=(visible[fn]&&!isSP)?'block':'none';
+    const ctrlEl=document.getElementById(fn+'SecCtrl');
+    const theoryEl=document.getElementById(fn+'SecTheory');
+    if(ctrlEl) ctrlEl.style.display=show;
+    if(theoryEl) theoryEl.style.display=show;
   });
-  const spSec=document.getElementById('superposSec');
-  if(spSec) spSec.style.display=isSP?'block':'none';
+  const spCtrl=document.getElementById('superposSecCtrl');
+  const spTheory=document.getElementById('superposSecTheory');
+  if(spCtrl) spCtrl.style.display=isSP?'block':'none';
+  if(spTheory) spTheory.style.display=isSP?'block':'none';
 
   document.getElementById('modeNormal')  ?.classList.toggle('on',graphMode==='normal');
   document.getElementById('modeAbs')     ?.classList.toggle('on',graphMode==='abs');
@@ -822,37 +844,6 @@ function updatePanel(){
     }
   }
   if(isSP){sH('spResult',spResultHTML());}
-
-  // Float info
-  let html='';
-  if(isSP){
-    const R=Math.sqrt(SP.p*SP.p+SP.q*SP.q);
-    const theta=Math.atan2(SP.q,SP.p);
-    const tStr=thetaStr(theta);
-    html=`
-    <div class="fi-row">
-      <span class="fi-dot" style="background:${FN_COLOR.sin}"></span>
-      <span class="fi-text"><i>y</i><span style="font-style:normal;margin:0 0.18em">=</span><span style="font-style:normal">${f2(SP.p)}·sin </span><i>x</i></span>
-    </div>
-    <div class="fi-row">
-      <span class="fi-dot" style="background:${FN_COLOR.cos}"></span>
-      <span class="fi-text"><i>y</i><span style="font-style:normal;margin:0 0.18em">=</span><span style="font-style:normal">${f2(SP.q)}·cos </span><i>x</i></span>
-    </div>
-    <div class="fi-row">
-      <span class="fi-dot" style="background:${SUM_C}"></span>
-      <span class="fi-text"><b style="color:${SUM_C}"><i>y</i><span style="font-style:normal;margin:0 0.18em">=</span><span style="font-style:normal">${f3(R)}·sin(</span><i>x</i><span style="font-style:normal;margin:0 0.12em">+</span><span style="font-style:normal">${tStr})</span></b></span>
-    </div>`;
-  } else {
-    FNS.forEach(fn=>{
-      if(!visible[fn])return;
-      html+=`<div class="fi-row">
-        <span class="fi-dot" style="background:${FN_COLOR[fn]}"></span>
-        <span class="fi-text">${eqHTML(fn)}</span>
-      </div>`;
-    });
-  }
-  if(!html) html='<span style="color:var(--light);font-size:13px">請選擇至少一個函數</span>';
-  sH('fiContent',html);
 }
 
 // ── CONTROLS ──
@@ -908,45 +899,10 @@ canvas.addEventListener('touchmove',e=>{
 },{passive:false});
 canvas.addEventListener('touchend',e=>{e.preventDefault();panRef=null;pinchDist=null;},{passive:false});
 
-// ── MOBILE ──
-function openDrawer(){document.getElementById('MOV').classList.add('open');}
-function closeDrawer(){document.getElementById('MOV').classList.remove('open');}
-function toggleDrawer(){const open=document.getElementById('MOV').classList.contains('open');open?closeDrawer():openDrawer();}
-
-(function setupMobilePanel(){
-  const mq=window.matchMedia('(max-width:760px)');
-  function handleMQ(e){
-    const panel=document.getElementById('mainPanel');
-    const mobContent=document.getElementById('mobContent');
-    if(e.matches){
-      if(panel.parentElement!==mobContent){
-        mobContent.appendChild(panel);
-        panel.style.display='flex';
-        panel.style.width='100%';
-        panel.style.borderRight='none';
-        panel.style.overflow='visible';
-      }
-    } else {
-      const main=document.querySelector('.main');
-      if(panel.parentElement!==main){
-        main.insertBefore(panel,main.querySelector('canvas'));
-        panel.style.display='';
-        panel.style.width='';
-        panel.style.borderRight='';
-        panel.style.overflow='';
-      }
-    }
-  }
-  mq.addEventListener('change',handleMQ);
-  handleMQ(mq);
-})();
-
 const st=document.createElement('style');
 st.textContent=`.r-sp::-webkit-slider-thumb{background:${SUM_C}!important;width:20px;height:20px;border-radius:50%;border:3px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.25);cursor:pointer;-webkit-appearance:none;}
 .r-sp::-moz-range-thumb{background:${SUM_C}!important;width:20px;height:20px;border-radius:50%;border:3px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.25);cursor:pointer;}`;
 document.head.appendChild(st);
-
-resize();
 </script>
 </body>
 </html>
