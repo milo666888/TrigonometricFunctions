@@ -11,7 +11,7 @@
   --csc-c:#e67e22;--sec-c:#8e44ad;--cot-c:#16a085;
   --sum-c:#7c3aed;
   --text:#1a1f36;--dim:#5a6280;--light:#9098b8;
-  --pw:420px;--f:'Times New Roman','Noto Serif TC',Georgia,serif;
+  --pw:clamp(300px,32vw,420px);--f:'Times New Roman','Noto Serif TC',Georgia,serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:var(--f);background:var(--bg);color:var(--text);
@@ -32,7 +32,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
   font-family:var(--f);transition:all .15s;}
 .btn:hover{color:var(--accent);border-color:var(--accent);background:#eef2ff;}
 
-.main{display:flex;flex:1;overflow:hidden;position:relative;}
+.main{display:flex;flex:1;min-width:0;min-height:0;overflow:hidden;position:relative;}
 
 .panel{width:var(--pw);background:var(--white);border-right:1.5px solid var(--border);
   display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;z-index:10;}
@@ -127,7 +127,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
 .fi-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:5px;}
 .fi-text{font-size:14px;color:var(--text);font-style:italic;}
 
-#canvas{flex:1;display:block;cursor:default;touch-action:none;background:#fff;}
+#canvas{flex:1;min-width:0;min-height:0;display:block;cursor:default;touch-action:none;background:#fff;}
 
 .fab{display:none;position:fixed;bottom:20px;left:20px;width:54px;height:54px;
   border-radius:50%;background:var(--accent);color:#fff;border:none;font-size:22px;
@@ -153,7 +153,25 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
 @media(max-width:760px){
   .panel{display:none;}.fab{display:flex;}.mob-overlay{display:block;}
   .hd-title p{display:none;}.hd-title h1{font-size:18px;}
-  #floatInfo{max-width:calc(100vw - 44px);}
+  header{height:58px;padding:0 10px;gap:8px;}
+  .logo-img{height:30px;max-width:60px;}
+  .btn{padding:8px 10px;font-size:14px;}
+  .hd-sep{height:26px;}
+  #floatInfo{min-width:0;max-width:calc(100vw - 100px);max-height:24dvh;overflow-y:auto;bottom:12px;right:12px;padding:8px 10px;pointer-events:auto;}
+  .fi-text{font-size:12px;overflow-wrap:anywhere;}
+  .fab{bottom:max(12px,env(safe-area-inset-bottom));left:12px;}
+  .mob-drawer{width:min(94vw,420px);padding-bottom:env(safe-area-inset-bottom);}
+  .mob-dh{position:sticky;top:0;background:var(--white);z-index:3;padding:10px 14px;}
+  .sec{padding:12px;}
+  .param-label{width:76px;}
+  .param-num{width:60px;}
+  .param-slider{min-width:0;}
+  .param-num input{font-size:16px;}
+  .eq-box{overflow-wrap:anywhere;}
+}
+@media(max-height:500px) and (max-width:760px){
+  header{height:48px;}
+  #floatInfo{max-height:28dvh;}
 }
 </style>
 </head>
@@ -415,7 +433,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
 <div id="floatInfo"><div id="fiContent"></div></div>
 </div>
 
-<button class="fab" id="fabBtn" onclick="toggleDrawer()">☰</button>
+<button class="fab" id="fabBtn" onclick="toggleDrawer()" aria-label="開啟參數設定" aria-controls="MOV" aria-expanded="false">☰</button>
 <div class="mob-overlay" id="MOV">
   <div class="mob-bg" onclick="closeDrawer()"></div>
   <div class="mob-drawer">
@@ -457,9 +475,11 @@ let originX=0,originY=0,scale=60,_init=false;
 function resize(){
   const main=document.querySelector('.main');
   const panel=document.querySelector('.panel');
-  const pw=panel?panel.offsetWidth:0;
-  const W0=main.offsetWidth-pw;
-  const H0=main.offsetHeight;
+  const pw=panel&&panel.parentElement===main?panel.offsetWidth:0;
+  const W0=Math.max(1,main.clientWidth-pw);
+  const H0=Math.max(1,main.clientHeight);
+  if(_init){originX+=(W0-canvas.width/dpr)/2;originY+=(H0-canvas.height/dpr)/2;}
+  dpr=window.devicePixelRatio||1;
   canvas.width=W0*dpr; canvas.height=H0*dpr;
   canvas.style.width=W0+'px'; canvas.style.height=H0+'px';
   ctx.setTransform(dpr,0,0,dpr,0,0);
@@ -934,8 +954,9 @@ canvas.addEventListener('touchmove',e=>{
 canvas.addEventListener('touchend',e=>{e.preventDefault();panRef=null;pinchDist=null;},{passive:false});
 
 // ── MOBILE ──
-function openDrawer(){document.getElementById('MOV').classList.add('open');}
-function closeDrawer(){document.getElementById('MOV').classList.remove('open');}
+function openDrawer(){document.getElementById('MOV').classList.add('open');document.getElementById('fabBtn').setAttribute('aria-expanded','true');}
+function closeDrawer(){document.getElementById('MOV').classList.remove('open');document.getElementById('fabBtn').setAttribute('aria-expanded','false');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
 function toggleDrawer(){const open=document.getElementById('MOV').classList.contains('open');open?closeDrawer():openDrawer();}
 
 (function setupMobilePanel(){
@@ -960,7 +981,9 @@ function toggleDrawer(){const open=document.getElementById('MOV').classList.cont
         panel.style.borderRight='';
         panel.style.overflow='';
       }
+      closeDrawer();
     }
+    requestAnimationFrame(resize);
   }
   mq.addEventListener('change',handleMQ);
   handleMQ(mq);
