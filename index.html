@@ -64,6 +64,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
   padding:9px 14px;font-size:17px;color:var(--text);margin-bottom:9px;
   line-height:1.65;min-height:44px;display:flex;align-items:center;flex-wrap:wrap;gap:0;
   font-style:italic;}
+.fn-name{font-style:normal;}
 .eq-sin{border-left:3px solid var(--sin-c)!important;}
 .eq-cos{border-left:3px solid var(--cos-c)!important;}
 .eq-tan{border-left:3px solid var(--tan-c)!important;}
@@ -225,8 +226,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
   <div class="sec" id="sinSec">
     <div class="fn-panel-hd"><span class="dot" style="background:var(--sin-c)"></span>sin 參數</div>
     <div class="eq-box eq-sin" style="display:block;font-size:16px;">
-      <div><i>y</i> = <i>a</i> · sin(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
-      <div id="sinParamEq" style="font-size:14px;margin-top:4px;"></div>
+      <div><i>y</i> = <i>a</i> · <span class="fn-name">sin</span>(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
     </div>
     <div class="eq-box eq-sin" id="sinEq"></div>
     <div class="desc-box" id="sinDesc"></div>
@@ -256,8 +256,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
   <div class="sec" id="cosSec" style="display:none">
     <div class="fn-panel-hd"><span class="dot" style="background:var(--cos-c)"></span>cos 參數</div>
     <div class="eq-box eq-cos" style="display:block;font-size:16px;">
-      <div><i>y</i> = <i>a</i> · cos(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
-      <div id="cosParamEq" style="font-size:14px;margin-top:4px;"></div>
+      <div><i>y</i> = <i>a</i> · <span class="fn-name">cos</span>(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
     </div>
     <div class="eq-box eq-cos" id="cosEq"></div>
     <div class="desc-box" id="cosDesc"></div>
@@ -287,8 +286,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
   <div class="sec" id="tanSec" style="display:none">
     <div class="fn-panel-hd"><span class="dot" style="background:var(--tan-c)"></span>tan 參數</div>
     <div class="eq-box eq-tan" style="display:block;font-size:16px;">
-      <div><i>y</i> = <i>a</i> · tan(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
-      <div id="tanParamEq" style="font-size:14px;margin-top:4px;"></div>
+      <div><i>y</i> = <i>a</i> · <span class="fn-name">tan</span>(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
     </div>
     <div class="eq-box eq-tan" id="tanEq"></div>
     <div class="desc-box" id="tanDesc"></div>
@@ -318,8 +316,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
   <div class="sec" id="cscSec" style="display:none">
     <div class="fn-panel-hd"><span class="dot" style="background:var(--csc-c)"></span>csc 參數</div>
     <div class="eq-box eq-csc" style="display:block;font-size:16px;">
-      <div><i>y</i> = <i>a</i> · csc(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
-      <div id="cscParamEq" style="font-size:14px;margin-top:4px;"></div>
+      <div><i>y</i> = <i>a</i> · <span class="fn-name">csc</span>(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
     </div>
     <div class="eq-box eq-csc" id="cscEq"></div>
     <div class="desc-box" id="cscDesc"></div>
@@ -349,8 +346,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
   <div class="sec" id="secSec" style="display:none">
     <div class="fn-panel-hd"><span class="dot" style="background:var(--sec-c)"></span>sec 參數</div>
     <div class="eq-box eq-sec" style="display:block;font-size:16px;">
-      <div><i>y</i> = <i>a</i> · sec(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
-      <div id="secParamEq" style="font-size:14px;margin-top:4px;"></div>
+      <div><i>y</i> = <i>a</i> · <span class="fn-name">sec</span>(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
     </div>
     <div class="eq-box eq-sec" id="secEq"></div>
     <div class="desc-box" id="secDesc"></div>
@@ -380,8 +376,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
   <div class="sec" id="cotSec" style="display:none">
     <div class="fn-panel-hd"><span class="dot" style="background:var(--cot-c)"></span>cot 參數</div>
     <div class="eq-box eq-cot" style="display:block;font-size:16px;">
-      <div><i>y</i> = <i>a</i> · cot(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
-      <div id="cotParamEq" style="font-size:14px;margin-top:4px;"></div>
+      <div><i>y</i> = <i>a</i> · <span class="fn-name">cot</span>(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
     </div>
     <div class="eq-box eq-cot" id="cotEq"></div>
     <div class="desc-box" id="cotDesc"></div>
@@ -818,7 +813,6 @@ function safeSet(id,v){const e=document.getElementById(id);if(e&&document.active
 function updatePanel(){
   FNS.forEach(fn=>{
     sH(fn+'Eq',eqHTML(fn));
-    sH(fn+'ParamEq',eqHTML(fn));
     sH(fn+'Desc',descHTML(fn));
   });
   FNS.forEach(fn=>{
