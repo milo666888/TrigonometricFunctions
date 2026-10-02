@@ -114,6 +114,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
 .fn-panel-hd{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;
   letter-spacing:.05em;margin-bottom:8px;padding:5px 10px;border-radius:7px;background:var(--surface2);}
 .fn-panel-hd .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.param-formula{margin-left:auto;font-size:15px;font-weight:400;font-style:normal;letter-spacing:0;white-space:nowrap;}
 
 .sp-result{background:#fdf4ff;border:1.5px solid #d8b4fe;border-radius:9px;
   padding:9px 13px;font-size:14px;line-height:2.1;color:var(--text);}
@@ -224,12 +225,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
 
   <!-- ── sin ── -->
   <div class="sec" id="sinSec">
-    <div class="fn-panel-hd"><span class="dot" style="background:var(--sin-c)"></span>sin 參數</div>
-    <div class="eq-box eq-sin" style="display:block;font-size:16px;">
-      <div><i>y</i> = <i>a</i> · <span class="fn-name">sin</span>(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
-    </div>
-    <div class="eq-box eq-sin" id="sinEq"></div>
-    <div class="desc-box" id="sinDesc"></div>
+    <div class="fn-panel-hd"><span class="dot" style="background:var(--sin-c)"></span>sin 參數 <span class="param-formula"><i>y</i>=<i>a</i>sin(<i>b</i><i>x</i>+<i>c</i>)+<i>d</i></span></div>
     <div class="param-row">
       <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
       <div class="param-num"><input class="i-sin" id="nSinA" type="number" step="0.1" value="1" oninput="P.sin.a=+this.value;redraw()"></div>
@@ -254,12 +250,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
 
   <!-- ── cos ── -->
   <div class="sec" id="cosSec" style="display:none">
-    <div class="fn-panel-hd"><span class="dot" style="background:var(--cos-c)"></span>cos 參數</div>
-    <div class="eq-box eq-cos" style="display:block;font-size:16px;">
-      <div><i>y</i> = <i>a</i> · <span class="fn-name">cos</span>(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
-    </div>
-    <div class="eq-box eq-cos" id="cosEq"></div>
-    <div class="desc-box" id="cosDesc"></div>
+    <div class="fn-panel-hd"><span class="dot" style="background:var(--cos-c)"></span>cos 參數 <span class="param-formula"><i>y</i>=<i>a</i>cos(<i>b</i><i>x</i>+<i>c</i>)+<i>d</i></span></div>
     <div class="param-row">
       <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
       <div class="param-num"><input class="i-cos" id="nCosA" type="number" step="0.1" value="1" oninput="P.cos.a=+this.value;redraw()"></div>
@@ -284,12 +275,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
 
   <!-- ── tan ── -->
   <div class="sec" id="tanSec" style="display:none">
-    <div class="fn-panel-hd"><span class="dot" style="background:var(--tan-c)"></span>tan 參數</div>
-    <div class="eq-box eq-tan" style="display:block;font-size:16px;">
-      <div><i>y</i> = <i>a</i> · <span class="fn-name">tan</span>(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
-    </div>
-    <div class="eq-box eq-tan" id="tanEq"></div>
-    <div class="desc-box" id="tanDesc"></div>
+    <div class="fn-panel-hd"><span class="dot" style="background:var(--tan-c)"></span>tan 參數 <span class="param-formula"><i>y</i>=<i>a</i>tan(<i>b</i><i>x</i>+<i>c</i>)+<i>d</i></span></div>
     <div class="param-row">
       <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
       <div class="param-num"><input class="i-tan" id="nTanA" type="number" step="0.1" value="1" oninput="P.tan.a=+this.value;redraw()"></div>
@@ -314,12 +300,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
 
   <!-- ── csc ── -->
   <div class="sec" id="cscSec" style="display:none">
-    <div class="fn-panel-hd"><span class="dot" style="background:var(--csc-c)"></span>csc 參數</div>
-    <div class="eq-box eq-csc" style="display:block;font-size:16px;">
-      <div><i>y</i> = <i>a</i> · <span class="fn-name">csc</span>(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
-    </div>
-    <div class="eq-box eq-csc" id="cscEq"></div>
-    <div class="desc-box" id="cscDesc"></div>
+    <div class="fn-panel-hd"><span class="dot" style="background:var(--csc-c)"></span>csc 參數 <span class="param-formula"><i>y</i>=<i>a</i>csc(<i>b</i><i>x</i>+<i>c</i>)+<i>d</i></span></div>
     <div class="param-row">
       <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
       <div class="param-num"><input class="i-csc" id="nCscA" type="number" step="0.1" value="1" oninput="P.csc.a=+this.value;redraw()"></div>
@@ -344,12 +325,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
 
   <!-- ── sec ── -->
   <div class="sec" id="secSec" style="display:none">
-    <div class="fn-panel-hd"><span class="dot" style="background:var(--sec-c)"></span>sec 參數</div>
-    <div class="eq-box eq-sec" style="display:block;font-size:16px;">
-      <div><i>y</i> = <i>a</i> · <span class="fn-name">sec</span>(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
-    </div>
-    <div class="eq-box eq-sec" id="secEq"></div>
-    <div class="desc-box" id="secDesc"></div>
+    <div class="fn-panel-hd"><span class="dot" style="background:var(--sec-c)"></span>sec 參數 <span class="param-formula"><i>y</i>=<i>a</i>sec(<i>b</i><i>x</i>+<i>c</i>)+<i>d</i></span></div>
     <div class="param-row">
       <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
       <div class="param-num"><input class="i-sec" id="nSecA" type="number" step="0.1" value="1" oninput="P.sec.a=+this.value;redraw()"></div>
@@ -374,12 +350,7 @@ header{height:64px;display:flex;align-items:center;padding:0 18px;background:var
 
   <!-- ── cot ── -->
   <div class="sec" id="cotSec" style="display:none">
-    <div class="fn-panel-hd"><span class="dot" style="background:var(--cot-c)"></span>cot 參數</div>
-    <div class="eq-box eq-cot" style="display:block;font-size:16px;">
-      <div><i>y</i> = <i>a</i> · <span class="fn-name">cot</span>(<i>b</i><i>x</i> + <i>c</i>) + <i>d</i></div>
-    </div>
-    <div class="eq-box eq-cot" id="cotEq"></div>
-    <div class="desc-box" id="cotDesc"></div>
+    <div class="fn-panel-hd"><span class="dot" style="background:var(--cot-c)"></span>cot 參數 <span class="param-formula"><i>y</i>=<i>a</i>cot(<i>b</i><i>x</i>+<i>c</i>)+<i>d</i></span></div>
     <div class="param-row">
       <div class="param-label"><span class="vi">a</span> 上下伸縮</div>
       <div class="param-num"><input class="i-cot" id="nCotA" type="number" step="0.1" value="1" oninput="P.cot.a=+this.value;redraw()"></div>
